@@ -59,8 +59,7 @@
 	  </EmbeddedResource>
 	</ItemGroup>
 
-	<!-- Temporarily disabled pre-build event to fix CI build -->
-	<!--<PropertyGroup>
+	<PropertyGroup>
 		<PreBuildEvent>call $(SolutionDir)Resources\Tools\rebuild_archives.bat "$(SolutionDir)" "$(MSBuildProjectDirectory)"</PreBuildEvent>
-	</PropertyGroup>-->
+	</PropertyGroup>
 </Project>
