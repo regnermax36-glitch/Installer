@@ -15,29 +15,29 @@ namespace Rectify11Installer.Themes
         public static class Styles
         {
             // Display fonts - largest text
-            public static Font DisplayLarge => new Font("Segoe UI Variable Display", 57f, FontStyle.Regular);
-            public static Font DisplayMedium => new Font("Segoe UI Variable Display", 45f, FontStyle.Regular);
-            public static Font DisplaySmall => new Font("Segoe UI Variable Display", 36f, FontStyle.Regular);
+            public static Font DisplayLarge => new Font("Segoe UI", 57f, FontStyle.Regular);
+            public static Font DisplayMedium => new Font("Segoe UI", 45f, FontStyle.Regular);
+            public static Font DisplaySmall => new Font("Segoe UI", 36f, FontStyle.Regular);
 
             // Headline fonts - section headers
-            public static Font HeadlineLarge => new Font("Segoe UI Variable Display", 32f, FontStyle.Regular);
-            public static Font HeadlineMedium => new Font("Segoe UI Variable Display", 28f, FontStyle.Regular);
-            public static Font HeadlineSmall => new Font("Segoe UI Variable Display", 24f, FontStyle.Regular);
+            public static Font HeadlineLarge => new Font("Segoe UI", 32f, FontStyle.Regular);
+            public static Font HeadlineMedium => new Font("Segoe UI", 28f, FontStyle.Regular);
+            public static Font HeadlineSmall => new Font("Segoe UI", 24f, FontStyle.Regular);
 
             // Title fonts - component titles
-            public static Font TitleLarge => new Font("Segoe UI Variable Text", 22f, FontStyle.Regular);
-            public static Font TitleMedium => new Font("Segoe UI Variable Text", 16f, FontStyle.Medium);
-            public static Font TitleSmall => new Font("Segoe UI Variable Text", 14f, FontStyle.Medium);
+            public static Font TitleLarge => new Font("Segoe UI", 22f, FontStyle.Regular);
+            public static Font TitleMedium => new Font("Segoe UI", 16f, FontStyle.Bold);
+            public static Font TitleSmall => new Font("Segoe UI", 14f, FontStyle.Bold);
 
             // Label fonts - UI labels
-            public static Font LabelLarge => new Font("Segoe UI Variable Text", 14f, FontStyle.Medium);
-            public static Font LabelMedium => new Font("Segoe UI Variable Text", 12f, FontStyle.Medium);
-            public static Font LabelSmall => new Font("Segoe UI Variable Text", 11f, FontStyle.Medium);
+            public static Font LabelLarge => new Font("Segoe UI", 14f, FontStyle.Bold);
+            public static Font LabelMedium => new Font("Segoe UI", 12f, FontStyle.Bold);
+            public static Font LabelSmall => new Font("Segoe UI", 11f, FontStyle.Bold);
 
             // Body fonts - content text
-            public static Font BodyLarge => new Font("Segoe UI Variable Text", 16f, FontStyle.Regular);
-            public static Font BodyMedium => new Font("Segoe UI Variable Text", 14f, FontStyle.Regular);
-            public static Font BodySmall => new Font("Segoe UI Variable Text", 12f, FontStyle.Regular);
+            public static Font BodyLarge => new Font("Segoe UI", 16f, FontStyle.Regular);
+            public static Font BodyMedium => new Font("Segoe UI", 14f, FontStyle.Regular);
+            public static Font BodySmall => new Font("Segoe UI", 12f, FontStyle.Regular);
         }
 
         /// <summary>
