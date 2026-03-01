@@ -303,13 +303,13 @@ namespace Rectify11Installer.Controls.Windows12Controls
             // Background with glassmorphism
             using (var brush = new SolidBrush(Color.FromArgb(100, bgColor)))
             {
-                g.FillRoundedRectangle(brush, bounds, Windows12_2027_DesignSystem.BorderRadius.MD);
+                Windows12_2027_DesignSystem.GraphicsExtensions.FillRoundedRectangle(g, brush, bounds, Windows12_2027_DesignSystem.BorderRadius.MD);
             }
             
             // Subtle border
             using (var pen = new Pen(Color.FromArgb(40, GetThemeColor("accent")), 1))
             {
-                g.DrawRoundedRectangle(pen, bounds, Windows12_2027_DesignSystem.BorderRadius.MD);
+                Windows12_2027_DesignSystem.GraphicsExtensions.DrawRoundedRectangle(g, pen, bounds, Windows12_2027_DesignSystem.BorderRadius.MD);
             }
         }
 
@@ -345,7 +345,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
                 Windows12_2027_Colors.Lighten(progressColor, 0.2f),
                 LinearGradientMode.Vertical))
             {
-                g.FillRoundedRectangle(gradient, progressBounds, Windows12_2027_DesignSystem.BorderRadius.MD);
+                Windows12_2027_DesignSystem.GraphicsExtensions.FillRoundedRectangle(g, gradient, progressBounds, Windows12_2027_DesignSystem.BorderRadius.MD);
             }
             
             // Neural network pattern overlay
@@ -381,7 +381,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
                     {
                         using (var brush = new SolidBrush(progressColor))
                         {
-                            g.FillRoundedRectangle(brush, blockBounds, Windows12_2027_DesignSystem.BorderRadius.SM);
+                            Windows12_2027_DesignSystem.GraphicsExtensions.FillRoundedRectangle(g, brush, blockBounds, Windows12_2027_DesignSystem.BorderRadius.SM);
                         }
                     }
                 }
@@ -432,7 +432,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
                         Color.FromArgb(100, Color.White),
                         LinearGradientMode.Horizontal))
                     {
-                        g.FillRoundedRectangle(brush, highlightBounds, Windows12_2027_DesignSystem.BorderRadius.MD);
+                        Windows12_2027_DesignSystem.GraphicsExtensions.FillRoundedRectangle(g, brush, highlightBounds, Windows12_2027_DesignSystem.BorderRadius.MD);
                     }
                 }
             }
@@ -576,4 +576,3 @@ namespace Rectify11Installer.Controls.Windows12Controls
         Marquee
     }
 }
-

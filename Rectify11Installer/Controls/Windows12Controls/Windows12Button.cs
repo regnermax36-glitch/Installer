@@ -279,7 +279,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
                         bounds.Width + i * 2,
                         bounds.Height + i * 2
                     );
-                    g.DrawRoundedRectangle(pen, glowBounds, _borderRadius + i);
+                    Windows12_2027_DesignSystem.GraphicsExtensions.DrawRoundedRectangle(g, pen, glowBounds, _borderRadius + i);
                 }
             }
         }
@@ -299,7 +299,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
                 Windows12_2027_Colors.Darken(currentColor, 0.1f),
                 LinearGradientMode.Vertical))
             {
-                g.FillRoundedRectangle(gradient, bounds, _borderRadius);
+                Windows12_2027_DesignSystem.GraphicsExtensions.FillRoundedRectangle(g, gradient, bounds, _borderRadius);
             }
 
             // Add glassmorphism overlay
@@ -307,7 +307,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
             {
                 using (var overlay = new SolidBrush(Color.FromArgb(30, Color.White)))
                 {
-                    g.FillRoundedRectangle(overlay, bounds, _borderRadius);
+                    Windows12_2027_DesignSystem.GraphicsExtensions.FillRoundedRectangle(g, overlay, bounds, _borderRadius);
                 }
             }
 
@@ -390,7 +390,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
 
             using (var pen = new Pen(borderColor, 1))
             {
-                g.DrawRoundedRectangle(pen, bounds, _borderRadius);
+                Windows12_2027_DesignSystem.GraphicsExtensions.DrawRoundedRectangle(g, pen, bounds, _borderRadius);
             }
         }
 
@@ -517,4 +517,3 @@ namespace Rectify11Installer.Controls.Windows12Controls
         Glass       // Glassmorphism effect
     }
 }
-
