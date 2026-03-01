@@ -210,13 +210,13 @@ namespace Rectify11Installer.Controls.Windows12Controls
             // Create semi-transparent background
             using (var brush = new SolidBrush(Color.FromArgb((int)(255 * _backgroundOpacity), baseColor)))
             {
-                Windows12_2027_DesignSystem.GraphicsExtensions.FillRoundedRectangle(g, brush, bounds, _borderRadius);
+                GraphicsExtensions.FillRoundedRectangle(g, brush, bounds, _borderRadius);
             }
             
             // Add gradient overlay for depth
             using (var gradient = CreateThemeGradient(bounds))
             {
-                Windows12_2027_DesignSystem.GraphicsExtensions.FillRoundedRectangle(g, gradient, bounds, _borderRadius);
+                GraphicsExtensions.FillRoundedRectangle(g, gradient, bounds, _borderRadius);
             }
             
             // Add noise texture for glassmorphism
@@ -231,7 +231,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
             using (var shimmerBrush = CreateShimmerBrush(bounds))
             {
                 // Create clipping path
-                using (var path = Windows12_2027_DesignSystem.GraphicsExtensions.CreateRoundedRectanglePath(bounds, _borderRadius))
+                using (var path = GraphicsExtensions.CreateRoundedRectanglePath(bounds, _borderRadius))
                 {
                     var oldClip = g.Clip;
                     g.SetClip(path);
@@ -266,7 +266,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
                         bounds.Width + i * 2,
                         bounds.Height + i * 2
                     );
-                    Windows12_2027_DesignSystem.GraphicsExtensions.DrawRoundedRectangle(g, pen, glowBounds, _borderRadius + i);
+                    GraphicsExtensions.DrawRoundedRectangle(g, pen, glowBounds, _borderRadius + i);
                 }
             }
         }
@@ -276,7 +276,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
             Color borderColor = GetThemeColor("accent");
             using (var pen = new Pen(Color.FromArgb(60, borderColor), 1))
             {
-                Windows12_2027_DesignSystem.GraphicsExtensions.DrawRoundedRectangle(g, pen, bounds, _borderRadius);
+                GraphicsExtensions.DrawRoundedRectangle(g, pen, bounds, _borderRadius);
             }
         }
 

@@ -44,6 +44,10 @@ namespace Rectify11Installer.Themes
             public static readonly Color Background = Color.FromArgb(8, 8, 8);
             public static readonly Color Text = Color.FromArgb(255, 255, 255);
             public static readonly Color TextSecondary = Color.FromArgb(180, 255, 180);
+            
+            // Quantum-specific energy colors
+            public static readonly Color ENERGY = Color.FromArgb(255, 215, 0);      // Quantum energy glow
+            public static readonly Color PARTICLE = Color.FromArgb(138, 43, 226);   // Quantum particle effect
         }
         #endregion
 

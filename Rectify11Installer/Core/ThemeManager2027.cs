@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Rectify11Installer.Themes;
+using Rectify11Installer.Controls.Windows12Controls;
 
 namespace Rectify11Installer.Core
 {
@@ -273,19 +274,19 @@ namespace Rectify11Installer.Core
             try
             {
                 // Apply theme based on control type
-                if (control is Windows12Controls.HolographicPanel panel)
+                if (control is HolographicPanel panel)
                 {
                     panel.ThemeVariant = _currentTheme;
                 }
-                else if (control is Windows12Controls.NeuralProgressBar progressBar)
+                else if (control is NeuralProgressBar progressBar)
                 {
                     progressBar.ThemeVariant = _currentTheme;
                 }
-                else if (control is Windows12Controls.QuantumCheckBox checkBox)
+                else if (control is QuantumCheckBox checkBox)
                 {
                     checkBox.ThemeVariant = _currentTheme;
                 }
-                else if (control is Windows12Controls.Windows12Button button)
+                else if (control is Windows12Button button)
                 {
                     button.ThemeVariant = _currentTheme;
                 }
@@ -583,4 +584,3 @@ namespace Rectify11Installer.Core
 
     #endregion
 }
-

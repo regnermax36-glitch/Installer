@@ -279,7 +279,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
                         bounds.Width + i * 2,
                         bounds.Height + i * 2
                     );
-                    Windows12_2027_DesignSystem.GraphicsExtensions.DrawRoundedRectangle(g, pen, glowBounds, _borderRadius + i);
+                    GraphicsExtensions.DrawRoundedRectangle(g, pen, glowBounds, _borderRadius + i);
                 }
             }
         }
@@ -299,7 +299,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
                 Windows12_2027_Colors.Darken(currentColor, 0.1f),
                 LinearGradientMode.Vertical))
             {
-                Windows12_2027_DesignSystem.GraphicsExtensions.FillRoundedRectangle(g, gradient, bounds, _borderRadius);
+                GraphicsExtensions.FillRoundedRectangle(g, gradient, bounds, _borderRadius);
             }
 
             // Add glassmorphism overlay
@@ -307,7 +307,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
             {
                 using (var overlay = new SolidBrush(Color.FromArgb(30, Color.White)))
                 {
-                    Windows12_2027_DesignSystem.GraphicsExtensions.FillRoundedRectangle(g, overlay, bounds, _borderRadius);
+                    GraphicsExtensions.FillRoundedRectangle(g, overlay, bounds, _borderRadius);
                 }
             }
 
@@ -354,7 +354,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
             if (_rippleRadius <= 0) return;
 
             // Create clipping path
-            using (var path = Windows12_2027_DesignSystem.GraphicsExtensions.CreateRoundedRectanglePath(bounds, _borderRadius))
+            using (var path = GraphicsExtensions.CreateRoundedRectanglePath(bounds, _borderRadius))
             {
                 var oldClip = g.Clip;
                 g.SetClip(path);
@@ -390,7 +390,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
 
             using (var pen = new Pen(borderColor, 1))
             {
-                Windows12_2027_DesignSystem.GraphicsExtensions.DrawRoundedRectangle(g, pen, bounds, _borderRadius);
+                GraphicsExtensions.DrawRoundedRectangle(g, pen, bounds, _borderRadius);
             }
         }
 

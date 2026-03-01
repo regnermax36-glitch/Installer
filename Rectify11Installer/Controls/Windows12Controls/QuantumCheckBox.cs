@@ -265,7 +265,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
             Color bgColor = GetThemeColor("surface");
             using (var bgBrush = new SolidBrush(Color.FromArgb(100, bgColor)))
             {
-                Windows12_2027_DesignSystem.GraphicsExtensions.FillRoundedRectangle(g, bgBrush, bounds, Windows12_2027_DesignSystem.BorderRadius.SM);
+                GraphicsExtensions.FillRoundedRectangle(g, bgBrush, bounds, Windows12_2027_DesignSystem.BorderRadius.SM);
             }
 
             // Hover glow effect
@@ -283,7 +283,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
                             bounds.Width + i,
                             bounds.Height + i
                         );
-                        Windows12_2027_DesignSystem.GraphicsExtensions.DrawRoundedRectangle(g, pen, glowBounds, Windows12_2027_DesignSystem.BorderRadius.SM + i/2);
+                        GraphicsExtensions.DrawRoundedRectangle(g, pen, glowBounds, Windows12_2027_DesignSystem.BorderRadius.SM + i/2);
                     }
                 }
             }
@@ -292,7 +292,7 @@ namespace Rectify11Installer.Controls.Windows12Controls
             Color borderColor = _isHovered ? GetThemeColor("accent") : Color.FromArgb(80, GetThemeColor("accent"));
             using (var pen = new Pen(borderColor, 2))
             {
-                Windows12_2027_DesignSystem.GraphicsExtensions.DrawRoundedRectangle(g, pen, bounds, Windows12_2027_DesignSystem.BorderRadius.SM);
+                GraphicsExtensions.DrawRoundedRectangle(g, pen, bounds, Windows12_2027_DesignSystem.BorderRadius.SM);
             }
 
             // Check mark or intermediate state
