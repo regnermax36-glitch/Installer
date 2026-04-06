@@ -4,13 +4,15 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLabel>
 #include <QtGui/QPainter>
+#include <QtGui/QLinearGradient>
 #include <QtCore/QDateTime>
 #include <QtCore/QTimer>
 
 class MaxregnerShell : public QWidget {
 public:
     MaxregnerShell() {
-        setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::X11NetWmWindowTypeDock);
+        setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+        setAttribute(Qt::WA_X11NetWmWindowTypeDock);
         setAttribute(Qt::WA_TranslucentBackground);
         resize(1280, 80);
 
@@ -22,7 +24,6 @@ public:
                          "color: white; border-radius: 20px; font-weight: bold; padding: 10px 25px; border: 1px solid rgba(255,255,255,80);");
         l->addWidget(b);
 
-        // Mock App Launcher Icons
         QStringList icons = {"🌐", "📂", "🎵", "💬", "🛠️"};
         for(const QString &icon : icons) {
             QPushButton *appBtn = new QPushButton(icon);
@@ -45,12 +46,10 @@ protected:
     void paintEvent(QPaintEvent *) {
         QPainter p(this);
         p.setRenderHint(QPainter::Antialiasing);
-        // Ultra-Glassy background with blur simulation
         p.setBrush(QColor(15, 15, 15, 140));
         p.setPen(QPen(QColor(255, 255, 255, 50), 1));
         p.drawRoundedRect(rect().adjusted(1, 1, -1, -1), 25, 25);
 
-        // Highlight effect
         QLinearGradient grad(0, 0, 0, height());
         grad.setColorAt(0, QColor(255, 255, 255, 30));
         grad.setColorAt(0.5, QColor(255, 255, 255, 0));
