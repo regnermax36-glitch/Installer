@@ -1,4 +1,4 @@
-﻿settings
+settings
 {
 	priority=1
 	exclude.where = !process.is_explorer
