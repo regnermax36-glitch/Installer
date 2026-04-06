@@ -1,4 +1,4 @@
-﻿using libmsstyle;
+using libmsstyle;
 using Microsoft.Win32;
 using Rectify11Installer.Controls;
 using System;

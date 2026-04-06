@@ -1,4 +1,4 @@
-﻿using Rectify11Installer.Core;
+using Rectify11Installer.Core;
 using System;
 using System.Runtime.InteropServices;
 
