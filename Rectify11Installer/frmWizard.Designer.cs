@@ -1,4 +1,4 @@
-﻿namespace Rectify11Installer
+namespace Rectify11Installer
 {
 	sealed partial class FrmWizard
 	{

@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using Rectify11Installer.Core;
 using Rectify11Installer.Pages;
 using Rectify11Installer.Win32;
