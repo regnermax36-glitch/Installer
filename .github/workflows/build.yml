@@ -37,7 +37,7 @@ jobs:
       run: nuget restore Rectify11Installer.sln
 
     - name: Build
-      run: msbuild Rectify11Installer.sln /p:Configuration=Release /p:platform=x64
+      run: msbuild Rectify11Installer.sln /p:Configuration=Release /p:platform=x64 /verbosity:detailed
 
     - name: Publish
       run: dotnet publish Rectify11Installer -c Release -p:PublishProfile=FolderProfile -property:SolutionDir=${{ github.workspace }}\

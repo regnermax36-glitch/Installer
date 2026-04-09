@@ -34,6 +34,7 @@
 		<None Include="Resources\Rectify11ControlCenter.exe" />
 		<Content Include="Resources\ResourceHacker.exe" />
 		<Content Include="r11.ico" />
+		<EmbeddedResource Include="Resources\InstallerImages\Windows12_2027\*.png" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="KPreisser.UI.TaskDialog" Version="1.0.0" />
