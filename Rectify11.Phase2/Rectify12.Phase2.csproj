@@ -39,10 +39,13 @@
 		<EmbeddedResource Update="Properties\Resources.resx">
 			<Generator>ResXFileCodeGenerator</Generator>
 			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+			<CustomToolNamespace>Rectify11.Phase2.Properties</CustomToolNamespace>
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
 	</ItemGroup>
 
 	<PropertyGroup>
@@ -53,6 +56,6 @@
 		<PropertyGroup>
 			<PostBuildCommands>copy /Y "$(TargetDir)Rectify11.Phase2.dll" "$(SolutionDir)Rectify11Installer/Resources/Rectify11.Phase2.dll" &amp;&amp; copy /Y "$(TargetDir)Rectify11.Phase2.exe" "$(SolutionDir)Rectify11Installer/Resources/Rectify11.Phase2.exe" &amp;&amp; copy /Y "$(TargetDir)Rectify11.Phase2.runtimeconfig.json" "$(SolutionDir)Rectify11Installer/Resources/Rectify11.Phase2.runtimeconfig.json"</PostBuildCommands>
 		</PropertyGroup>
-		<Exec Command="$(PostBuildCommands)" />
+		<Exec Condition="'$(OS)' == 'Windows_NT'" Command="$(PostBuildCommands)" />
 	</Target>
 </Project>

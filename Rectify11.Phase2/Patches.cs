@@ -16,7 +16,7 @@ namespace Rectify11.Phase2
         {
             XmlSerializer ser = new XmlSerializer(typeof(Patches));
             Patches patches;
-            using (var reader = new StringReader(Rectify11.Phase2.Properties.Resources.rectify11))
+            using (var reader = new StringReader(Rectify11.Phase2.Properties.Resources.rectify11xml))
             {
                 patches = (Patches)ser.Deserialize(reader);
             }
