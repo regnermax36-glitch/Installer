@@ -18,51 +18,6 @@ jobs:
         submodules: recursive
         lfs: true
 
-    - name: Install ATL (C++ ATL component)
-      shell: pwsh
-      run: |
-        $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-        $vsPath = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
-        if (-not $vsPath) {
-          $vsPath = & $vswhere -latest -products * -property installationPath
-        }
-        Write-Host "Using VS path: $vsPath"
-
-        $installer = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe"
-        & $installer modify --installPath "$vsPath" `
-          --add Microsoft.VisualStudio.Component.VC.ATL `
-          --add Microsoft.VisualStudio.Component.VC.ATL.Spectre `
-          --quiet --norestart --wait --nocache
-
-        # Also try common fixed paths in case vswhere missed the active install
-        $commonPaths = @(
-          "C:\Program Files\Microsoft Visual Studio\2022\Enterprise",
-          "C:\Program Files\Microsoft Visual Studio\18\Enterprise"
-        )
-        foreach ($p in $commonPaths) {
-          if (Test-Path $p) {
-            Write-Host "Also modifying: $p"
-            & $installer modify --installPath "$p" `
-              --add Microsoft.VisualStudio.Component.VC.ATL `
-              --quiet --norestart --wait --nocache 2>$null
-          }
-        }
-
-        # Locate atlcomcli.h
-        $found = Get-ChildItem -Path "C:\Program Files\Microsoft Visual Studio" -Recurse -Filter "atlcomcli.h" -ErrorAction SilentlyContinue | Select-Object -First 1
-        if ($found) {
-          Write-Host "FOUND: $($found.FullName)"
-          $env:ATL_INCLUDE = $found.DirectoryName
-          echo "ATL_INCLUDE=$($found.DirectoryName)" | Out-File -FilePath $env:GITHUB_ENV -Append
-        } else {
-          Write-Warning "atlcomcli.h not found after install. Rectify11CPL will fail."
-        }
-
-    - name: Setup MSVC Developer Command Prompt
-      uses: ilammy/msvc-dev-cmd@v1
-      with:
-        arch: x64
-
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
       with:
@@ -76,15 +31,10 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore Rectify11Installer.sln
 
-    - name: Build (skip Rectify11CPL if ATL missing)
-      shell: cmd
+    - name: Build (exclude Rectify11CPL - requires ATL)
       run: |
-        if defined ATL_INCLUDE (
-          msbuild Rectify11Installer.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /verbosity:minimal
-        ) else (
-          echo ATL not available, building without Rectify11CPL
-          msbuild Rectify11Installer.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /t:RectifyStart;libmsstyle;Rectify11.Phase2;Rectify11Installer /verbosity:minimal
-        )
+        msbuild Rectify11Installer.sln /p:Configuration=Release /p:Platform=x64 /verbosity:minimal /t:RectifyStart;libmsstyle;Rectify11.Phase2;Rectify11Installer
+      shell: cmd
 
     - name: Publish
       run: dotnet publish Rectify11Installer -c Release -p:PublishProfile=FolderProfile -property:SolutionDir=${{ github.workspace }}\
