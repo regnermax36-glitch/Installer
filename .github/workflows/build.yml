@@ -18,23 +18,26 @@ jobs:
         submodules: recursive
         lfs: true
 
-    - name: Place vendored atlcomcli.h where the compiler looks
+    - name: Remove atlcomcli.h dependency from source
       shell: pwsh
       run: |
-        $targetDirs = @(
-          "RectifyControlPanel2\Rectify11CPL",
-          "RectifyControlPanel2\dui70\DirectUI"
-        )
-        foreach ($dir in $targetDirs) {
-          if (Test-Path $dir) {
-            Copy-Item -Force "vendor\atl\atlcomcli.h" "$dir\atlcomcli.h"
-            Write-Host "Copied to $dir"
-          }
+        $header = "RectifyControlPanel2\Rectify11CPL\Rectify11CPL.h"
+        if (Test-Path $header) {
+          $content = Get-Content $header -Raw
+          $content = $content -replace '#include\s*<atlcomcli\.h>\s*', ''
+          $content = $content -replace '#include\s*"atlcomcli\.h"\s*', ''
+          Set-Content $header $content -NoNewline
+          Write-Host "Removed atlcomcli.h include from $header"
+        } else {
+          Write-Warning "Header not found: $header"
         }
-        # Also drop it in a well-known include location
-        New-Item -ItemType Directory -Force -Path "vendor\atl" | Out-Null
-        $env:INCLUDE = "$PWD\vendor\atl;$env:INCLUDE"
-        echo "INCLUDE=$PWD\vendor\atl;$env:INCLUDE" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+        # Also drop the vendored stub next to the sources as a fallback
+        $stub = "vendor\atl\atlcomcli.h"
+        if (Test-Path $stub) {
+          Copy-Item -Force $stub "RectifyControlPanel2\Rectify11CPL\atlcomcli.h"
+          Write-Host "Placed fallback stub"
+        }
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
