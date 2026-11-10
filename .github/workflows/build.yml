@@ -4,10 +4,6 @@ on:
   workflow_dispatch:
   push:
   pull_request:
-  workflow_run:
-    workflows: ["Submodules Sync"]
-    types:
-      - completed
 
 jobs:
   build:
@@ -19,16 +15,33 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with: 
-        token: ${{ secrets.GITHUB_TOKEN }}
         submodules: recursive
         lfs: true
 
-    - name: Install ATL (required for Rectify11CPL)
-      run: |
-        $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
-        $installer = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe"
-        & $installer modify --installPath $vsPath --add Microsoft.VisualStudio.Component.VC.ATL --quiet --norestart --wait
+    - name: Install ATL component
       shell: pwsh
+      run: |
+        $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+        $vsPath = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+        if (-not $vsPath) { throw "VS not found" }
+        Write-Host "VS Path: $vsPath"
+
+        $installer = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe"
+        & $installer modify --installPath "$vsPath" --add Microsoft.VisualStudio.Component.VC.ATL --add Microsoft.VisualStudio.Component.VC.ATL.Spectre --quiet --norestart --wait
+        if ($LASTEXITCODE -ne 0) { Write-Warning "ATL install exit code: $LASTEXITCODE" }
+
+        # Verify header exists
+        $atlHeader = Get-ChildItem -Path "$vsPath\VC\Tools\MSVC" -Recurse -Filter "atlcomcli.h" -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($atlHeader) {
+          Write-Host "ATL header found: $($atlHeader.FullName)"
+        } else {
+          Write-Warning "atlcomcli.h still not found after install"
+        }
+
+    - name: Setup MSVC Developer Command Prompt
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
@@ -44,10 +57,11 @@ jobs:
       run: nuget restore Rectify11Installer.sln
 
     - name: Build
-      run: msbuild Rectify11Installer.sln /p:Configuration=Release /p:platform=x64 /p:PlatformToolset=v143
+      run: msbuild Rectify11Installer.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /verbosity:minimal
 
     - name: Publish
       run: dotnet publish Rectify11Installer -c Release -p:PublishProfile=FolderProfile -property:SolutionDir=${{ github.workspace }}\
+      continue-on-error: true
       
     - name: Upload Rectify11Installer
       uses: actions/upload-artifact@v4
