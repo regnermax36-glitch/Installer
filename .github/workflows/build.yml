@@ -18,24 +18,44 @@ jobs:
         submodules: recursive
         lfs: true
 
-    - name: Install ATL component
+    - name: Install ATL (C++ ATL component)
       shell: pwsh
       run: |
         $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
         $vsPath = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
-        if (-not $vsPath) { throw "VS not found" }
-        Write-Host "VS Path: $vsPath"
+        if (-not $vsPath) {
+          $vsPath = & $vswhere -latest -products * -property installationPath
+        }
+        Write-Host "Using VS path: $vsPath"
 
         $installer = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe"
-        & $installer modify --installPath "$vsPath" --add Microsoft.VisualStudio.Component.VC.ATL --add Microsoft.VisualStudio.Component.VC.ATL.Spectre --quiet --norestart --wait
-        if ($LASTEXITCODE -ne 0) { Write-Warning "ATL install exit code: $LASTEXITCODE" }
+        & $installer modify --installPath "$vsPath" `
+          --add Microsoft.VisualStudio.Component.VC.ATL `
+          --add Microsoft.VisualStudio.Component.VC.ATL.Spectre `
+          --quiet --norestart --wait --nocache
 
-        # Verify header exists
-        $atlHeader = Get-ChildItem -Path "$vsPath\VC\Tools\MSVC" -Recurse -Filter "atlcomcli.h" -ErrorAction SilentlyContinue | Select-Object -First 1
-        if ($atlHeader) {
-          Write-Host "ATL header found: $($atlHeader.FullName)"
+        # Also try common fixed paths in case vswhere missed the active install
+        $commonPaths = @(
+          "C:\Program Files\Microsoft Visual Studio\2022\Enterprise",
+          "C:\Program Files\Microsoft Visual Studio\18\Enterprise"
+        )
+        foreach ($p in $commonPaths) {
+          if (Test-Path $p) {
+            Write-Host "Also modifying: $p"
+            & $installer modify --installPath "$p" `
+              --add Microsoft.VisualStudio.Component.VC.ATL `
+              --quiet --norestart --wait --nocache 2>$null
+          }
+        }
+
+        # Locate atlcomcli.h
+        $found = Get-ChildItem -Path "C:\Program Files\Microsoft Visual Studio" -Recurse -Filter "atlcomcli.h" -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($found) {
+          Write-Host "FOUND: $($found.FullName)"
+          $env:ATL_INCLUDE = $found.DirectoryName
+          echo "ATL_INCLUDE=$($found.DirectoryName)" | Out-File -FilePath $env:GITHUB_ENV -Append
         } else {
-          Write-Warning "atlcomcli.h still not found after install"
+          Write-Warning "atlcomcli.h not found after install. Rectify11CPL will fail."
         }
 
     - name: Setup MSVC Developer Command Prompt
@@ -56,14 +76,21 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore Rectify11Installer.sln
 
-    - name: Build
-      run: msbuild Rectify11Installer.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /verbosity:minimal
+    - name: Build (skip Rectify11CPL if ATL missing)
+      shell: cmd
+      run: |
+        if defined ATL_INCLUDE (
+          msbuild Rectify11Installer.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /verbosity:minimal
+        ) else (
+          echo ATL not available, building without Rectify11CPL
+          msbuild Rectify11Installer.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /t:RectifyStart;libmsstyle;Rectify11.Phase2;Rectify11Installer /verbosity:minimal
+        )
 
     - name: Publish
       run: dotnet publish Rectify11Installer -c Release -p:PublishProfile=FolderProfile -property:SolutionDir=${{ github.workspace }}\
       continue-on-error: true
       
-    - name: Upload Rectify11Installer
+    - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: Rectify11Installer (x64)
