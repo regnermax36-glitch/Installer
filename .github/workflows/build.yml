@@ -18,6 +18,24 @@ jobs:
         submodules: recursive
         lfs: true
 
+    - name: Place vendored atlcomcli.h where the compiler looks
+      shell: pwsh
+      run: |
+        $targetDirs = @(
+          "RectifyControlPanel2\Rectify11CPL",
+          "RectifyControlPanel2\dui70\DirectUI"
+        )
+        foreach ($dir in $targetDirs) {
+          if (Test-Path $dir) {
+            Copy-Item -Force "vendor\atl\atlcomcli.h" "$dir\atlcomcli.h"
+            Write-Host "Copied to $dir"
+          }
+        }
+        # Also drop it in a well-known include location
+        New-Item -ItemType Directory -Force -Path "vendor\atl" | Out-Null
+        $env:INCLUDE = "$PWD\vendor\atl;$env:INCLUDE"
+        echo "INCLUDE=$PWD\vendor\atl;$env:INCLUDE" | Out-File -FilePath $env:GITHUB_ENV -Append
+
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
       with:
@@ -31,7 +49,7 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore Rectify11Installer.sln
 
-    - name: Build with vendored ATL stub
+    - name: Build
       shell: cmd
       run: |
         set INCLUDE=%CD%\vendor\atl;%INCLUDE%
