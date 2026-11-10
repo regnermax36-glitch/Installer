@@ -31,10 +31,11 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore Rectify11Installer.sln
 
-    - name: Build (exclude Rectify11CPL - requires ATL)
-      run: |
-        msbuild Rectify11Installer.sln /p:Configuration=Release /p:Platform=x64 /verbosity:minimal /t:RectifyStart;libmsstyle;Rectify11.Phase2;Rectify11Installer
+    - name: Build with vendored ATL stub
       shell: cmd
+      run: |
+        set INCLUDE=%CD%\vendor\atl;%INCLUDE%
+        msbuild Rectify11Installer.sln /p:Configuration=Release /p:Platform=x64 /verbosity:minimal /p:AdditionalIncludeDirectories="%CD%\vendor\atl"
 
     - name: Publish
       run: dotnet publish Rectify11Installer -c Release -p:PublishProfile=FolderProfile -property:SolutionDir=${{ github.workspace }}\
