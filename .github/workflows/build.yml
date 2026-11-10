@@ -17,11 +17,18 @@ jobs:
       
     steps:
     - name: Checkout
-      uses: actions/checkout@v4.1.6
+      uses: actions/checkout@v4
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
         submodules: recursive
         lfs: true
+
+    - name: Install ATL (required for Rectify11CPL)
+      run: |
+        $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+        $installer = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe"
+        & $installer modify --installPath $vsPath --add Microsoft.VisualStudio.Component.VC.ATL --quiet --norestart --wait
+      shell: pwsh
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2
@@ -29,7 +36,7 @@ jobs:
         msbuild-architecture: x64
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4.0.0
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: "8"
 
@@ -37,14 +44,15 @@ jobs:
       run: nuget restore Rectify11Installer.sln
 
     - name: Build
-      run: msbuild Rectify11Installer.sln /p:Configuration=Release /p:platform=x64
+      run: msbuild Rectify11Installer.sln /p:Configuration=Release /p:platform=x64 /p:PlatformToolset=v143
 
     - name: Publish
       run: dotnet publish Rectify11Installer -c Release -p:PublishProfile=FolderProfile -property:SolutionDir=${{ github.workspace }}\
       
     - name: Upload Rectify11Installer
-      uses: actions/upload-artifact@v4.3.3
+      uses: actions/upload-artifact@v4
       with:
         name: Rectify11Installer (x64)
         path: Rectify11Installer\bin\Release\net8.0-windows\publish\win-x64\Rectify11Installer.exe
         compression-level: 0
+        if-no-files-found: warn
